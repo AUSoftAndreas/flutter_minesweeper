@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:minesweeper/notifiers/_notifiers.dart';
 import 'package:minesweeper/ui/match_screen.dart';
 import 'package:minesweeper/ui/start_screen.dart';
 
@@ -22,11 +21,8 @@ void main() {
 // Note: MyApp is a HookWidget, from flutter_hooks.
 class MyApp extends HookWidget {
   @override
+  // ignore: prefer_expression_function_bodies
   Widget build(BuildContext context) {
-    // To read our provider, we can use the hook "useProvider".
-    // This is only possible because MyApp is a HookWidget.
-    final String value = useProvider(helloWorldProvider);
-
     return MaterialApp(
       routes: {
         '/': (context) => StartScreen(),
