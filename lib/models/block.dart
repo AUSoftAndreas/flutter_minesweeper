@@ -49,18 +49,4 @@ class Block {
       if (block.mine) _closeMines++;
     });
   }
-
-  /// Reveals (opens) this block. If this block has no mines in its neighboring
-  /// fields, it will reveal its neighbors too.
-  void reveal(Map<Position, Block> map) {
-    open = true;
-    if (mine) return;
-    if (closeMines == 0) {
-      _neighbors(map).forEach((block) {
-        if (!block.open) {
-          block.reveal(map);
-        }
-      });
-    }
-  }
 }
