@@ -11,7 +11,7 @@ void main() {
   );
 }
 
-/// Base class for the entire app
+/// Base class of app
 class MyApp extends HookWidget {
   @override
   // ignore: prefer_expression_function_bodies
