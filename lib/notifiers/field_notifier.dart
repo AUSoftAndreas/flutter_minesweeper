@@ -15,9 +15,11 @@ class FieldNotifier extends StateNotifier<Field> {
     state = Field.withArguments(numRows: numRows, numCols: numCols, mines: mines);
   }
 
-  /// Handles click events from GUI.
+  /// Is triggered by users clicking on a certain block in the game (MatchScreen)
   void handleClick(Block block) {
-    if (state.gameLost) return;
+    if (state.gameLost) {
+      return;
+    }
     if (state.flagMode) {
       block.flagged = !block.flagged;
       state = state.copyWith();
@@ -38,9 +40,9 @@ class FieldNotifier extends StateNotifier<Field> {
     state = state.copyWith();
   }
 
-  /// Toggles Flag Mode. Enabled flag mode means that the user does not
-  /// want to open a block, but rather to just plant a flag because
-  /// he suspects a bomb there.
+  /// Is triggered by the user clicking on the toggle switch for flag mode
+  /// If the user is in flag mode, he will mark suspected bomb locations,
+  /// instead of openig a tile.
   void toggleFlagMode() {
     state = state.copyWith(flagMode: !state.flagMode);
   }

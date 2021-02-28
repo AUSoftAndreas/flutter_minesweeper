@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,11 +7,12 @@ import 'package:minesweeper/models/position.dart';
 import 'package:minesweeper/notifiers/_notifiers.dart';
 import 'package:minesweeper/notifiers/field_notifier.dart';
 
+/// Central GUI Screen. Represents a playing field and handles user input
 class MatchScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final fieldNotifier = useProvider(globFieldNotifier);
-    var field = useProvider(globFieldNotifier.state);
+    final field = useProvider(globFieldNotifier.state);
     final height = MediaQuery.of(context).size.height * 0.8;
     final width = MediaQuery.of(context).size.width;
     final max = height > width ? width : height;
@@ -47,7 +46,7 @@ class MatchScreen extends HookWidget {
                       border: Border.all(),
                     ),
                     child: IconButton(
-                      icon: Icon(Icons.flag),
+                      icon: const Icon(Icons.flag),
                       iconSize: max > 500 ? max * 0.1 : 50,
                       onPressed: () {
                         fieldNotifier.toggleFlagMode();
@@ -62,7 +61,7 @@ class MatchScreen extends HookWidget {
                       border: Border.all(),
                     ),
                     child: IconButton(
-                      icon: Icon(Icons.replay),
+                      icon: const Icon(Icons.replay),
                       iconSize: max > 500 ? max * 0.1 : 50,
                       onPressed: () {
                         fieldNotifier.create(numRows: 10, numCols: 10, mines: 20);
@@ -79,10 +78,10 @@ class MatchScreen extends HookWidget {
   }
 
   List<Widget> _buildBlocks(Field field, FieldNotifier fieldNotifier) {
-    var widgets = <Widget>[];
+    final widgets = <Widget>[];
     for (var row = field.numRows - 1; row >= 0; row--) {
       for (var col = 0; col < field.numCols; col++) {
-        var block = field.map[Position(col, row)];
+        final block = field.map[Position(col, row)];
         if (block != null) {
           widgets.add(
             InkWell(
@@ -99,7 +98,7 @@ class MatchScreen extends HookWidget {
   }
 
   Widget _buildBlock(Block block) {
-    Color color = Colors.transparent;
+    var color = Colors.transparent;
     if (block.open && !block.mine) {
       color = Colors.white;
     }
@@ -117,13 +116,13 @@ class MatchScreen extends HookWidget {
   }
 
   Widget _buildBlockCenter(Block block) {
-    Color color = Colors.black;
+    var color = Colors.black;
     if (block.flagged) {
-      return Icon(Icons.flag);
+      return const Icon(Icons.flag);
     } else if (!block.open) {
-      return Text('');
+      return const Text('');
     } else if (block.mine) {
-      return Text('M');
+      return const Text('M');
     } else {
       if (block.closeMines <= 2) {
         color = Colors.green;
@@ -141,20 +140,18 @@ class MatchScreen extends HookWidget {
     }
   }
 
-  Material _buildRestart(FieldNotifier fieldNotifier) {
-    return Material(
-      child: Container(
-        color: Colors.grey[300],
-        child: Center(
-          child: IconButton(
-            icon: Icon(Icons.replay),
-            iconSize: 50,
-            onPressed: () {
-              fieldNotifier.create(numRows: 10, numCols: 10, mines: 20);
-            },
+  Material _buildRestart(FieldNotifier fieldNotifier) => Material(
+        child: Container(
+          color: Colors.grey[300],
+          child: Center(
+            child: IconButton(
+              icon: const Icon(Icons.replay),
+              iconSize: 50,
+              onPressed: () {
+                fieldNotifier.create(numRows: 10, numCols: 10, mines: 20);
+              },
+            ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }
