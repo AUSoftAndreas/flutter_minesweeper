@@ -1,6 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minesweeper/models/block.dart';
 import 'package:minesweeper/models/field.dart';
+import 'package:minesweeper/models/game_status.dart';
 
 /// The FieldNotifier is the connection between GUI and state. All state
 /// changes go through FieldNotifier. It extends StateNotifier which handles
@@ -11,16 +12,15 @@ class FieldNotifier extends StateNotifier<Field> {
 
   /// Creates a new playing field ... just by instantiating a new state
   /// with a new playing field
-  void create({required int numRows, required int numCols, required int mines}) {
-    state = Field.withArguments(numRows: numRows, numCols: numCols, mines: mines);
+  void create({required int numRows, required int numCols, required int minePercentage}) {
+    state = Field.withArguments(numRows: numRows, numCols: numCols, minePercentage: minePercentage);
   }
 
   /// Is triggered by users clicking on a certain block in the game (MatchScreen)
-  void handleClick(Block block) {
-    if (state.gameLost) {
-      return;
-    }
-    if (state.flagMode) {
+  // ignore: avoid_positional_boolean_parameters
+  void handleClick(Block block, bool flagMode) {
+    if (state.gameStatus != GameStatus.gameRunning) return;
+    if (flagMode) {
       block.flagged = !block.flagged;
       state = state.copyWith();
       return;
@@ -34,16 +34,8 @@ class FieldNotifier extends StateNotifier<Field> {
           if (block.mine) block.open = true;
         },
       );
-      state = state.copyWith(gameLost: true);
-      return;
+      // The game will automatically be lost
     }
     state = state.copyWith();
-  }
-
-  /// Is triggered by the user clicking on the toggle switch for flag mode
-  /// If the user is in flag mode, he will mark suspected bomb locations,
-  /// instead of openig a tile.
-  void toggleFlagMode() {
-    state = state.copyWith(flagMode: !state.flagMode);
   }
 }

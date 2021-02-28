@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minesweeper/models/block.dart';
 import 'package:minesweeper/models/field.dart';
+import 'package:minesweeper/models/game_status.dart';
 import 'package:minesweeper/models/position.dart';
 import 'package:minesweeper/notifiers/_notifiers.dart';
 import 'package:minesweeper/notifiers/field_notifier.dart';
@@ -17,24 +18,28 @@ class MatchScreen extends HookWidget {
     final width = MediaQuery.of(context).size.width;
     final max = height > width ? width : height;
     final orientation = MediaQuery.of(context).orientation;
+    final flagModeNotifier = useState(false);
     if (field.numCols == 0) {
       return _buildRestart(fieldNotifier);
     }
     return Material(
       child: Container(
-        color: field.gameLost ? Colors.red[700] : Colors.grey[300],
+        color: field.gameStatus == GameStatus.gameLost ? Colors.red[700] : (field.gameStatus == GameStatus.gameWon ? Colors.green[100] : Colors.grey[300]),
         height: height,
         child: Flex(
           direction: orientation == Orientation.landscape ? Axis.horizontal : Axis.vertical,
           children: [
             Expanded(
-              child: GridView.count(
-                crossAxisCount: field.numCols,
-                children: _buildBlocks(field, fieldNotifier),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: GridView.count(
+                  crossAxisCount: field.numCols,
+                  children: _buildBlocks(field, fieldNotifier, flagModeNotifier.value),
+                ),
               ),
             ),
             Flex(
-              direction: Axis.vertical,
+              direction: orientation == Orientation.landscape ? Axis.vertical : Axis.horizontal,
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -42,14 +47,14 @@ class MatchScreen extends HookWidget {
                   padding: EdgeInsets.all(max > 500 ? max * 0.05 : 25),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: field.flagMode ? Colors.green : Colors.transparent,
+                      color: flagModeNotifier.value ? Colors.green : Colors.transparent,
                       border: Border.all(),
                     ),
                     child: IconButton(
                       icon: const Icon(Icons.flag),
                       iconSize: max > 500 ? max * 0.1 : 50,
                       onPressed: () {
-                        fieldNotifier.toggleFlagMode();
+                        flagModeNotifier.value = !flagModeNotifier.value;
                       },
                     ),
                   ),
@@ -64,7 +69,7 @@ class MatchScreen extends HookWidget {
                       icon: const Icon(Icons.replay),
                       iconSize: max > 500 ? max * 0.1 : 50,
                       onPressed: () {
-                        fieldNotifier.create(numRows: 10, numCols: 10, mines: 20);
+                        fieldNotifier.create(numRows: 10, numCols: 10, minePercentage: 10);
                       },
                     ),
                   ),
@@ -77,7 +82,7 @@ class MatchScreen extends HookWidget {
     );
   }
 
-  List<Widget> _buildBlocks(Field field, FieldNotifier fieldNotifier) {
+  List<Widget> _buildBlocks(Field field, FieldNotifier fieldNotifier, bool flagMode) {
     final widgets = <Widget>[];
     for (var row = field.numRows - 1; row >= 0; row--) {
       for (var col = 0; col < field.numCols; col++) {
@@ -86,7 +91,7 @@ class MatchScreen extends HookWidget {
           widgets.add(
             InkWell(
               onTap: () {
-                fieldNotifier.handleClick(block);
+                fieldNotifier.handleClick(block, flagMode);
               },
               child: _buildBlock(block),
             ),
@@ -148,7 +153,7 @@ class MatchScreen extends HookWidget {
               icon: const Icon(Icons.replay),
               iconSize: 50,
               onPressed: () {
-                fieldNotifier.create(numRows: 10, numCols: 10, mines: 20);
+                fieldNotifier.create(numRows: 10, numCols: 10, minePercentage: 20);
               },
             ),
           ),

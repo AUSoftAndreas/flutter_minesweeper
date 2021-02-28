@@ -5,7 +5,7 @@ void main() {
   test('Field should be created and have the right number of fields/mines', () {
     final fieldNotifier = FieldNotifier();
     // ignore: cascade_invocations
-    fieldNotifier.create(numRows: 10, numCols: 10, mines: 20);
+    fieldNotifier.create(numRows: 10, numCols: 10, minePercentage: 20);
     // ignore: invalid_use_of_protected_member
     final state = fieldNotifier.state;
     var numMines = 0;
