@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @immutable
+
+/// General settings of the app
 class Settings {
 /*-----------------------------------------------------------------------------\
 | Constants                                                                    |
@@ -52,12 +53,14 @@ class Settings {
 /*-----------------------------------------------------------------------------\
 | Constructors                                                                 |
 \-----------------------------------------------------------------------------*/
-  Settings()
+  /// Standard constructor, only constructs a fixed standard game
+  const Settings()
       : _rows = stdRows,
         _cols = stdCols,
         _minePercentage = stdMinePercentage;
 
-  Settings._internal({required int rows, required int cols, required int minePercentage})
+  /// Internal constructor, used by copyWith method
+  const Settings._internal({required int rows, required int cols, required int minePercentage})
       : _rows = rows,
         _cols = cols,
         _minePercentage = minePercentage;
@@ -65,6 +68,7 @@ class Settings {
 /*-----------------------------------------------------------------------------\
 | Methods                                                                      |
 \-----------------------------------------------------------------------------*/
+  /// Copies the current settings into a new Settings object, changing values in that moment
   Settings copyWith({int? rows, int? cols, int? minePercentage}) => Settings._internal(
         cols: cols ?? _cols,
         rows: rows ?? _rows,

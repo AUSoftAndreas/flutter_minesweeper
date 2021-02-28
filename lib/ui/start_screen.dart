@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:minesweeper/models/field.dart';
 import 'package:minesweeper/models/settings.dart';
 import 'package:minesweeper/notifiers/_notifiers.dart';
-import 'package:minesweeper/notifiers/settings_notifier.dart';
 
 /// Welcome Screen for the app
 class StartScreen extends HookWidget {
@@ -25,6 +23,7 @@ class StartScreen extends HookWidget {
               style: TextStyle(
                 decoration: TextDecoration.underline,
                 fontSize: 22,
+                fontWeight: FontWeight.bold,
               ),
             ),
             Padding(
@@ -66,12 +65,18 @@ class StartScreen extends HookWidget {
                 settingsNotifier.setMinePercentage(newValue.toInt());
               },
             ),
-            IconButton(
-              icon: const Icon(Icons.ac_unit),
-              onPressed: () {
-                fieldNotifier.create(numRows: settings.rows, numCols: settings.cols, minePercentage: settings.minePercentage);
-                Navigator.pushNamed(context, '/match');
-              },
+            Padding(
+              padding: const EdgeInsets.only(top: 48),
+              child: ElevatedButton(
+                child: const Text(
+                  'Spiel starten',
+                  style: TextStyle(fontSize: 22),
+                ),
+                onPressed: () {
+                  fieldNotifier.create(numRows: settings.rows, numCols: settings.cols, minePercentage: settings.minePercentage);
+                  Navigator.pushNamed(context, '/match');
+                },
+              ),
             ),
           ],
         ),

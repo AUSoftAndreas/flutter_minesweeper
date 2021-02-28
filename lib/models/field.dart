@@ -124,13 +124,18 @@ class Field {
     var status = GameStatus.gameWon;
     for (var pos in map.keys) {
       final block = map[pos]!;
-      if (block.mine && block.open) return GameStatus.gameLost;
+      if (block.mine && block.open) {
+        for (var block2 in map.values) {
+          if (block2.mine) {
+            block2.open = true;
+          }
+        }
+        return GameStatus.gameLost;
+      }
       if (!block.mine && !block.open) {
-        log('Found closed block at $pos');
         status = GameStatus.gameRunning;
       }
     }
-    log('Emitting $status');
     // If the game is won now, we open all fields that are still closed
     if (status == GameStatus.gameWon) {
       for (var block in map.values) {

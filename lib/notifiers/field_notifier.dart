@@ -28,14 +28,6 @@ class FieldNotifier extends StateNotifier<Field> {
     if (block.flagged) return;
     if (block.open) return;
     block.reveal(state.map);
-    if (block.mine) {
-      state.map.forEach(
-        (pos, block) {
-          if (block.mine) block.open = true;
-        },
-      );
-      // The game will automatically be lost
-    }
     state = state.copyWith();
   }
 }

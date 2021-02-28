@@ -5,6 +5,7 @@ import 'package:minesweeper/models/block.dart';
 import 'package:minesweeper/models/field.dart';
 import 'package:minesweeper/models/game_status.dart';
 import 'package:minesweeper/models/position.dart';
+import 'package:minesweeper/models/settings.dart';
 import 'package:minesweeper/notifiers/_notifiers.dart';
 import 'package:minesweeper/notifiers/field_notifier.dart';
 
@@ -19,8 +20,10 @@ class MatchScreen extends HookWidget {
     final max = height > width ? width : height;
     final orientation = MediaQuery.of(context).orientation;
     final flagModeNotifier = useState(false);
+    final settingsNotifier = useProvider(globalSettingsNotifier);
+    final settings = useProvider(globalSettingsNotifier.state);
     if (field.numCols == 0) {
-      return _buildRestart(fieldNotifier);
+      return _buildRestart(fieldNotifier, settings);
     }
     return Material(
       child: Container(
@@ -69,7 +72,7 @@ class MatchScreen extends HookWidget {
                       icon: const Icon(Icons.replay),
                       iconSize: max > 500 ? max * 0.1 : 50,
                       onPressed: () {
-                        fieldNotifier.create(numRows: 10, numCols: 10, minePercentage: 10);
+                        fieldNotifier.create(numRows: settings.rows, numCols: settings.cols, minePercentage: settings.minePercentage);
                       },
                     ),
                   ),
@@ -145,7 +148,7 @@ class MatchScreen extends HookWidget {
     }
   }
 
-  Material _buildRestart(FieldNotifier fieldNotifier) => Material(
+  Material _buildRestart(FieldNotifier fieldNotifier, Settings settings) => Material(
         child: Container(
           color: Colors.grey[300],
           child: Center(
@@ -153,7 +156,7 @@ class MatchScreen extends HookWidget {
               icon: const Icon(Icons.replay),
               iconSize: 50,
               onPressed: () {
-                fieldNotifier.create(numRows: 10, numCols: 10, minePercentage: 20);
+                fieldNotifier.create(numRows: settings.rows, numCols: settings.cols, minePercentage: settings.minePercentage);
               },
             ),
           ),
