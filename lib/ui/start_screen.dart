@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minesweeper/notifiers/_notifiers.dart';
 
+/// StartScreen of the app
 class StartScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class StartScreen extends HookWidget {
       child: Container(
         child: Center(
           child: IconButton(
-            icon: Icon(Icons.ac_unit),
+            icon: const Icon(Icons.ac_unit),
             onPressed: () {
               fieldNotifier.create(numRows: 10, numCols: 10, mines: 20);
               Navigator.pushNamed(context, '/match');
