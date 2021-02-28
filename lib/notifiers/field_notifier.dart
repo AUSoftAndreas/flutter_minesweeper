@@ -16,28 +16,7 @@ class FieldNotifier extends StateNotifier<Field> {
   }
 
   /// Is triggered by users clicking on a certain block in the game (MatchScreen)
-  void handleClick(Block block) {
-    if (state.gameLost) {
-      return;
-    }
-    if (state.flagMode) {
-      block.flagged = !block.flagged;
-      state = state.copyWith();
-      return;
-    }
-    if (block.open) return;
-    block.reveal(state.map);
-    if (block.mine) {
-      state.map.forEach(
-        (pos, block) {
-          if (block.mine) block.open = true;
-        },
-      );
-      state = state.copyWith(gameLost: true);
-      return;
-    }
-    state = state.copyWith();
-  }
+  void handleClick(Block block) {}
 
   /// Is triggered by the user clicking on the toggle switch for flag mode
   /// If the user is in flag mode, he will mark suspected bomb locations,
