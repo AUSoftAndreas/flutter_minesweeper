@@ -12,7 +12,7 @@ void main() {
   );
 }
 
-/// This class is the central class of the app, it starts everything else
+/// Base class of app
 class MyApp extends HookWidget {
   @override
   // ignore: prefer_expression_function_bodies

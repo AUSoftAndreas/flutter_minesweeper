@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minesweeper/notifiers/_notifiers.dart';
 
-/// StartScreen of the app
+/// Welcome Screen for the app
 class StartScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
